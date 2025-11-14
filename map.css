@@ -5,15 +5,15 @@ body {
   height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center;
+  align-items: center;
 }
 
 #map {
-  width: 100%; /* Adjust width to your desired size */
-  height: 100%; /* Adjust height to your desired size */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for effect */
-  border-radius: 8px; /* Optional: rounded corners */
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 #map svg {
@@ -24,9 +24,45 @@ body {
   pointer-events: none;
 }
 
+#map svg circle,
+.legend > div {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+}
+
 #map svg circle {
-  fill: steelblue;
+  fill: var(--color);
   fill-opacity: 0.6;
   stroke: white;
   pointer-events: auto;
+}
+
+.legend {
+  display: flex;
+  gap: 1em;
+  margin-block: 1em;
+  align-items: center;
+}
+
+.legend > span {
+  font-weight: bold;
+}
+
+.legend > div {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.legend > div::before {
+  content: "";
+  width: 1.5em;
+  height: 1.5em;
+  background: var(--color);
+  border-radius: 50%;
 }

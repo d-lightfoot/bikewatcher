@@ -69,6 +69,8 @@ function filterTripsbyTime(trips, timeFilter) {
       });
 }
 
+let stationFlow = d3.scaleQuantize().domain([0, 1]).range([0, 0.5, 1]);
+
 map.on('load', async () => {
   map.addSource('boston_route', {
     type: 'geojson',
@@ -150,7 +152,10 @@ map.on('load', async () => {
         .text(
           `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`,
         );
-    });
+    })
+    .style('--departure-ratio', (d) =>
+      stationFlow(d.departures / d.totalTraffic),
+    );
 
   function updatePositions() {
     circles
@@ -179,7 +184,10 @@ map.on('load', async () => {
     circles
       .data(filteredStations, (d) => d.short_name)
       .join('circle')
-      .attr('r', (d) => radiusScale(d.totalTraffic));
+      .attr('r', (d) => radiusScale(d.totalTraffic))
+      .style('--departure-ratio', (d) =>
+        stationFlow(d.departures / d.totalTraffic),
+      );
   }
 
   function updateTimeDisplay() {
